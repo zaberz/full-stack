@@ -12,7 +12,6 @@ class BaseController extends Controller {
 
   apiErrorReturn(code, message) {
     let {ctx} = this;
-
     ctx.body = {
       code,
       message,
@@ -20,8 +19,22 @@ class BaseController extends Controller {
     };
   }
 
-  getUserInfo() {
-    return {id: 1, name: 'test'}
+  async getUserInfo() {
+    let {ctx, app} = this
+    let userInfo = null;
+    const token = ctx.header.authorization;
+    if (token) {
+      const tokenInfo = await app.jwt.verify(token.split(' ')[1], app.config.jwt.secret)
+      const {id, exp} = tokenInfo
+      if (exp * 1000 > +new Date) {
+        userInfo = {
+          id
+        }
+      }else{
+        throw new Error('登陆过期')
+      }
+    }
+    return userInfo
   }
 }
 

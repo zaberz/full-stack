@@ -32,7 +32,7 @@ class TaskService extends Service {
   }
 
   async selectByUid(uid) {
-    let res = await this.app.mysql.select(tableName, {uid});
+    let res = await this.app.mysql.select(tableName, {where: {uid}});
     return res;
   }
 }

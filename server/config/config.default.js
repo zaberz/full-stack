@@ -32,6 +32,9 @@ module.exports = appInfo => {
       app: true,
       agent: false
     },
+    jwt: {
+      secret: 'todolist',
+    },
     security: {
       csrf: {
         enable: false,
