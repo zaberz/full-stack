@@ -7,6 +7,7 @@
 
 <script>
 import taskStore from '@/libs/taskStore';
+import {addTask} from "@/api/task";
 
 export default {
   data: ()=> ({
@@ -15,6 +16,8 @@ export default {
   methods: {
     async add() {
       console.log(taskStore);
+      let res = await addTask(this.task)
+      console.log(res);
       await taskStore.setItem(+new Date(), this.task);
       this.$router.push({
         name: 'home'

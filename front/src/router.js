@@ -4,7 +4,7 @@ import Home from './views/Home.vue'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
@@ -20,6 +20,27 @@ export default new Router({
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "about" */ './views/Add.vue')
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: ()=> import('./views/Login.vue')
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token');
+
+  if (!token && to.name !== 'login') {
+    next({
+      name: 'login',
+      query: {
+        redirect: to.path
+      }
+    })
+  }
+  next()
+})
+
+export default router

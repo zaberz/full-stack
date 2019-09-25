@@ -8,6 +8,8 @@
 <script>
 import TaskItem from '@/components/TaskItem';
 import taskStore from '@/libs/taskStore';
+import {getTasks} from '@/api/task';
+
 export default {
   name: 'home',
   components: {
@@ -27,9 +29,14 @@ export default {
       list,
     }
   },
-  mounted() {
+  async mounted() {
+    this.initTaskList()
   },
   methods: {
+    async initTaskList() {
+      const taskList = await getTasks()
+      this.list = taskList
+    },
     removeTask(task) {
       let index = this.list.findIndex((item) => (item === task))
       let key = task.key
